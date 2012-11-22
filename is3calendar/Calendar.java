@@ -53,6 +53,9 @@ public class Calendar extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
+        calendarStateLabel = new javax.swing.JLabel();
+
+        addAppointmentFrame.setMinimumSize(new java.awt.Dimension(500, 500));
 
         addAppointmentFrameLocationTextInput.setText("Location");
         addAppointmentFrameLocationTextInput.addActionListener(new java.awt.event.ActionListener() {
@@ -144,6 +147,12 @@ public class Calendar extends javax.swing.JFrame {
             }
         });
 
+        monthDisplayPane.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                monthDisplayPaneStateChanged(evt);
+            }
+        });
+
         dayDisplayTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"8:00", null},
@@ -192,62 +201,93 @@ public class Calendar extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {"8:00", null, null, null, null, null, null, null},
+                {"9:00", null, null, null, null, null, null, null},
+                {"10:00", null, null, null, null, null, null, null},
+                {"11:00", null, null, null, null, null, null, null},
+                {"12:00", null, null, null, null, null, null, null},
+                {"13:00", null, null, null, null, null, null, null},
+                {"14:00", null, null, null, null, null, null, null},
+                {"15:00", null, null, null, null, null, null, null},
+                {"16:00", null, null, null, null, null, null, null},
+                {"17:00", null, null, null, null, null, null, null},
+                {"18:00", null, null, null, null, null, null, null},
+                {"19:00", null, null, null, null, null, null, null},
+                {"20:00", null, null, null, null, null, null, null},
+                {"21:00", null, null, null, null, null, null, null},
+                {"22:00", null, null, null, null, null, null, null},
+                {"23:00", null, null, null, null, null, null, null},
+                {"00:00", null, null, null, null, null, null, null},
+                {"1:00", null, null, null, null, null, null, null},
+                {"2:00", null, null, null, null, null, null, null},
+                {"3:00", null, null, null, null, null, null, null},
+                {"4:00", null, null, null, null, null, null, null},
+                {"5:00", null, null, null, null, null, null, null},
+                {"6:00", null, null, null, null, null, null, null},
+                {"7:00", null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
             }
         ));
         jScrollPane3.setViewportView(jTable1);
+        jTable1.getColumnModel().getColumn(0).setMinWidth(60);
+        jTable1.getColumnModel().getColumn(0).setMaxWidth(60);
 
         monthDisplayPane.addTab("Week", jScrollPane3);
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
             }
         ));
         jScrollPane4.setViewportView(jTable2);
 
         monthDisplayPane.addTab("Month", jScrollPane4);
 
+        calendarStateLabel.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(monthDisplayPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(443, 443, 443)
-                            .addComponent(addAppointmentButton))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(140, 140, 140)
-                            .addComponent(commandLineInput, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(commandLineSubmit))))
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addGap(443, 443, 443)
+                .addComponent(addAppointmentButton)
+                .addContainerGap(434, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(commandLineInput, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(commandLineSubmit)
+                .addGap(253, 253, 253))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(calendarStateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(303, 303, 303))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(monthDisplayPane, javax.swing.GroupLayout.PREFERRED_SIZE, 916, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(commandLineInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(commandLineSubmit))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                .addComponent(monthDisplayPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(58, 58, 58)
+                    .addComponent(commandLineSubmit)
+                    .addComponent(commandLineInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(calendarStateLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(monthDisplayPane, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(addAppointmentButton)
                 .addContainerGap())
         );
@@ -303,6 +343,10 @@ public class Calendar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addAppointmentFrameConfirmButtonActionPerformed
 
+    private void monthDisplayPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_monthDisplayPaneStateChanged
+
+    }//GEN-LAST:event_monthDisplayPaneStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -352,6 +396,7 @@ public class Calendar extends javax.swing.JFrame {
     private javax.swing.JTextField addAppointmentFrameLocationTextInput;
     private javax.swing.JComboBox addAppointmentFrameRecurrenceComboList;
     private javax.swing.JTextField addAppointmentFrameStartTimeTextInput;
+    private javax.swing.JLabel calendarStateLabel;
     private javax.swing.JTextField commandLineInput;
     private javax.swing.JButton commandLineSubmit;
     private javax.swing.JScrollPane dayDisplayPane;
