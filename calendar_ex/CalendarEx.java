@@ -22,7 +22,7 @@ public class CalendarEx {
 	 public CalendarEx()
 	    {
 		 
-		 appList = new ArrayList<>();
+		 appList = new ArrayList<Appointment>();
 	 }
          
          
@@ -61,7 +61,7 @@ public class CalendarEx {
 		    	 the_date = Integer.parseInt(bis.readLine());		    	 
 			     start_time_h = Integer.parseInt(bis.readLine());
 			     start_time_m = Integer.parseInt(bis.readLine());
-			     
+			         
 			     end_time_h = Integer.parseInt(bis.readLine());
 			     end_time_m = Integer.parseInt(bis.readLine());
 			     
@@ -185,7 +185,7 @@ public class CalendarEx {
 		 int startID = CalendarDate.getDateID(start);
 		 int endID = CalendarDate.getDateID(end);
 		 
-		 List<Appointment> aps = new ArrayList<>();
+		 List<Appointment> aps = new ArrayList<Appointment>();
 
 		 Appointment ap;
 		 ListIterator<Appointment> it = appList.listIterator();
@@ -229,3 +229,4 @@ public class CalendarEx {
 	
 	
 }
+

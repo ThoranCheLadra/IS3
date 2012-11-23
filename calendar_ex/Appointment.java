@@ -148,7 +148,7 @@ public class Appointment {
 		// given a start date ID and and end date id, returns a list of dates
 		// that this appointment recurs. 
 		
-		List<CalendarDate> ids = new ArrayList<>();
+		List<CalendarDate> ids = new ArrayList<CalendarDate>();
 		int id = CalendarDate.getDateID(date);
 		
 		// how many days between recurrences
