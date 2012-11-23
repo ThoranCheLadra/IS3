@@ -45,7 +45,7 @@ public class CalendarEx {
 		     int the_date, id;
 		     int start_time_h, start_time_m, end_time_h, end_time_m;
 		     
-		     String description, location, category;
+		     String name, description, location, category;
 		     int recurrence, reminder;
 		     
 		     while (s != null) {
@@ -65,6 +65,7 @@ public class CalendarEx {
 			     end_time_h = Integer.parseInt(bis.readLine());
 			     end_time_m = Integer.parseInt(bis.readLine());
 			     
+                             name = bis.readLine();
 			     description = bis.readLine();
 			     location = bis.readLine();
 			     category = bis.readLine();
@@ -76,6 +77,7 @@ public class CalendarEx {
 			     ap = new Appointment(new CalendarDate(the_date), 
 			    		 			  new CalendarTime(start_time_h, start_time_m),
 			    		 			  new CalendarTime(end_time_h, end_time_m),
+                                                                  name,
 			    		 			  description,
 			    		 			  location,
 			    		 			  category,

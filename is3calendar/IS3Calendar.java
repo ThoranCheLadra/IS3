@@ -5,10 +5,11 @@
 package is3calendar;
 
 import calendar_ex.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.Component;
 import java.util.*;
-import javax.swing.JLabel;
+import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 
 /**
@@ -21,7 +22,7 @@ public class IS3Calendar extends javax.swing.JFrame {
     private static String displayMode;
         
     private static CalendarDate startDate;
-    private static CalendarDate endDate;
+    private static CalendarDate endDate; 
     private static GregorianCalendar currentMonthDate;
     /**
      * Creates new form Calendar
@@ -29,10 +30,15 @@ public class IS3Calendar extends javax.swing.JFrame {
     public IS3Calendar() {
         initComponents();
         cal = new CalendarEx();
-        fileName = "events2.ser";
+        fileName = "events3.ser";
         displayMode = "Day";
+        monthDisplayPane.setSelectedIndex(2);
+        GregorianCalendar today = new GregorianCalendar();
+        currentMonthDate = today;
+        populateMonth(today);
     }
-
+    
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,25 +49,15 @@ public class IS3Calendar extends javax.swing.JFrame {
     private void initComponents() {
 
         addAppointmentFrame = new javax.swing.JFrame();
-        addAppointmentFrameEndTimeTextInput = new javax.swing.JTextField();
-        addAppointmentFrameStartTimeTextInput = new javax.swing.JTextField();
-        addAppointmentFrameRecurrenceComboList = new javax.swing.JComboBox();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        addAppointmentFrameDescriptionTextarea = new javax.swing.JTextArea();
         addAppointmentFrameLocationTextInput = new javax.swing.JTextField();
-        addAppointmentFrameConfirmButton = new javax.swing.JButton();
-        addAppointmentFrameDateTextInput = new javax.swing.JTextField();
         addAppointmentFrameCategoryTextInput = new javax.swing.JTextField();
-        editAppointmentFrame = new javax.swing.JFrame();
-        editAppointmentFrameLocationTextInput = new javax.swing.JTextField();
-        editAppointmentFrameCategoryTextInput = new javax.swing.JTextField();
-        editAppointmentFrameDateTextInput = new javax.swing.JTextField();
-        editAppointmentFrameStartTimeTextInput = new javax.swing.JTextField();
-        editAppointmentFrameEndTimeTextInput = new javax.swing.JTextField();
-        editAppointmentFrameConfirmButton = new javax.swing.JButton();
+        addAppointmentFrameDateTextInput = new javax.swing.JTextField();
+        addAppointmentFrameStartTimeTextInput = new javax.swing.JTextField();
+        addAppointmentFrameEndTimeTextInput = new javax.swing.JTextField();
+        addAppointmentFrameConfirmButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        editAppointmentFrameDescriptionTextarea = new javax.swing.JTextArea();
-        editAppointmentFrameRecurrenceComboList = new javax.swing.JComboBox();
+        addAppointmentFrameDescriptionTextarea = new javax.swing.JTextArea();
+        addAppointmentFrameRecurrenceComboList = new javax.swing.JComboBox();
         commandLineSubmit = new javax.swing.JButton();
         commandLineInput = new javax.swing.JTextField();
         addAppointmentButton = new javax.swing.JButton();
@@ -69,24 +65,13 @@ public class IS3Calendar extends javax.swing.JFrame {
         dayDisplayPane = new javax.swing.JScrollPane();
         dayDisplayTable = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        weekDisplayTable = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        monthDisplayTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         addAppointmentFrame.setMinimumSize(new java.awt.Dimension(500, 500));
-
-        addAppointmentFrameEndTimeTextInput.setText("End time (hh:mm)");
-
-        addAppointmentFrameStartTimeTextInput.setText("Start time (hh:mm)");
-
-        addAppointmentFrameRecurrenceComboList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "Daily", "Weekly", "Two weekly", "Four weekly" }));
-
-        addAppointmentFrameDescriptionTextarea.setColumns(20);
-        addAppointmentFrameDescriptionTextarea.setRows(5);
-        addAppointmentFrameDescriptionTextarea.setText("Description");
-        jScrollPane5.setViewportView(addAppointmentFrameDescriptionTextarea);
 
         addAppointmentFrameLocationTextInput.setText("Location");
         addAppointmentFrameLocationTextInput.addActionListener(new java.awt.event.ActionListener() {
@@ -95,6 +80,14 @@ public class IS3Calendar extends javax.swing.JFrame {
             }
         });
 
+        addAppointmentFrameCategoryTextInput.setText("Category");
+
+        addAppointmentFrameDateTextInput.setText("Date (DD/MM/YYYY)");
+
+        addAppointmentFrameStartTimeTextInput.setText("Start time (hh:mm)");
+
+        addAppointmentFrameEndTimeTextInput.setText("End time (hh:mm)");
+
         addAppointmentFrameConfirmButton.setText("Confirm");
         addAppointmentFrameConfirmButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -102,9 +95,12 @@ public class IS3Calendar extends javax.swing.JFrame {
             }
         });
 
-        addAppointmentFrameDateTextInput.setText("Date (DD/MM/YYYY)");
+        addAppointmentFrameDescriptionTextarea.setColumns(20);
+        addAppointmentFrameDescriptionTextarea.setRows(5);
+        addAppointmentFrameDescriptionTextarea.setText("Description");
+        jScrollPane2.setViewportView(addAppointmentFrameDescriptionTextarea);
 
-        addAppointmentFrameCategoryTextInput.setText("Category");
+        addAppointmentFrameRecurrenceComboList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "Daily", "Weekly", "Two weekly", "Four weekly" }));
 
         javax.swing.GroupLayout addAppointmentFrameLayout = new javax.swing.GroupLayout(addAppointmentFrame.getContentPane());
         addAppointmentFrame.getContentPane().setLayout(addAppointmentFrameLayout);
@@ -118,7 +114,7 @@ public class IS3Calendar extends javax.swing.JFrame {
                 .addGap(145, 145, 145)
                 .addGroup(addAppointmentFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(addAppointmentFrameRecurrenceComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(addAppointmentFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(addAppointmentFrameLocationTextInput)
                         .addComponent(addAppointmentFrameCategoryTextInput, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
@@ -135,7 +131,7 @@ public class IS3Calendar extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(addAppointmentFrameCategoryTextInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(addAppointmentFrameDateTextInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -146,78 +142,6 @@ public class IS3Calendar extends javax.swing.JFrame {
                 .addComponent(addAppointmentFrameRecurrenceComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15)
                 .addComponent(addAppointmentFrameConfirmButton)
-                .addContainerGap(131, Short.MAX_VALUE))
-        );
-
-        editAppointmentFrameLocationTextInput.setText("Location");
-        editAppointmentFrameLocationTextInput.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editAppointmentFrameLocationTextInputActionPerformed(evt);
-            }
-        });
-
-        editAppointmentFrameCategoryTextInput.setText("Category");
-
-        editAppointmentFrameDateTextInput.setText("Date (DD/MM/YYYY)");
-
-        editAppointmentFrameStartTimeTextInput.setText("Start time (hh:mm)");
-
-        editAppointmentFrameEndTimeTextInput.setText("End time (hh:mm)");
-
-        editAppointmentFrameConfirmButton.setText("Confirm");
-        editAppointmentFrameConfirmButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editAppointmentFrameConfirmButtonActionPerformed(evt);
-            }
-        });
-
-        editAppointmentFrameDescriptionTextarea.setColumns(20);
-        editAppointmentFrameDescriptionTextarea.setRows(5);
-        editAppointmentFrameDescriptionTextarea.setText("Description");
-        jScrollPane2.setViewportView(editAppointmentFrameDescriptionTextarea);
-
-        editAppointmentFrameRecurrenceComboList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "Daily", "Weekly", "Two weekly", "Four weekly" }));
-
-        javax.swing.GroupLayout editAppointmentFrameLayout = new javax.swing.GroupLayout(editAppointmentFrame.getContentPane());
-        editAppointmentFrame.getContentPane().setLayout(editAppointmentFrameLayout);
-        editAppointmentFrameLayout.setHorizontalGroup(
-            editAppointmentFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, editAppointmentFrameLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(editAppointmentFrameConfirmButton)
-                .addGap(41, 41, 41))
-            .addGroup(editAppointmentFrameLayout.createSequentialGroup()
-                .addGap(145, 145, 145)
-                .addGroup(editAppointmentFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(editAppointmentFrameRecurrenceComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(editAppointmentFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(editAppointmentFrameLocationTextInput)
-                        .addComponent(editAppointmentFrameCategoryTextInput, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
-                    .addComponent(editAppointmentFrameEndTimeTextInput, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editAppointmentFrameStartTimeTextInput, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editAppointmentFrameDateTextInput, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        editAppointmentFrameLayout.setVerticalGroup(
-            editAppointmentFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(editAppointmentFrameLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(editAppointmentFrameLocationTextInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editAppointmentFrameCategoryTextInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(editAppointmentFrameDateTextInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editAppointmentFrameStartTimeTextInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editAppointmentFrameEndTimeTextInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editAppointmentFrameRecurrenceComboList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addComponent(editAppointmentFrameConfirmButton)
                 .addContainerGap(131, Short.MAX_VALUE))
         );
 
@@ -296,7 +220,7 @@ public class IS3Calendar extends javax.swing.JFrame {
 
         monthDisplayPane.addTab("Day", dayDisplayPane);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        weekDisplayTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"8:00", null, null, null, null, null, null, null},
                 {"9:00", null, null, null, null, null, null, null},
@@ -327,13 +251,14 @@ public class IS3Calendar extends javax.swing.JFrame {
                 "Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
             }
         ));
-        jScrollPane3.setViewportView(jTable1);
-        jTable1.getColumnModel().getColumn(0).setMinWidth(60);
-        jTable1.getColumnModel().getColumn(0).setMaxWidth(60);
+        jScrollPane3.setViewportView(weekDisplayTable);
+        weekDisplayTable.getColumnModel().getColumn(0).setMinWidth(60);
+        weekDisplayTable.getColumnModel().getColumn(0).setMaxWidth(60);
 
         monthDisplayPane.addTab("Week", jScrollPane3);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        monthDisplayTable.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        monthDisplayTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -345,21 +270,15 @@ public class IS3Calendar extends javax.swing.JFrame {
             new String [] {
                 "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+        ));
+        monthDisplayTable.setCellSelectionEnabled(true);
+        monthDisplayTable.setRowHeight(40);
+        monthDisplayTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable2MouseClicked(evt);
+                monthDisplayTableMouseClicked(evt);
             }
         });
-        jScrollPane4.setViewportView(jTable2);
+        jScrollPane4.setViewportView(monthDisplayTable);
 
         monthDisplayPane.addTab("Month", jScrollPane4);
 
@@ -427,24 +346,25 @@ public class IS3Calendar extends javax.swing.JFrame {
         addAppointmentFrame.setVisible(true);
     }//GEN-LAST:event_addAppointmentButtonActionPerformed
 
-    private void editAppointmentFrameLocationTextInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editAppointmentFrameLocationTextInputActionPerformed
+    private void addAppointmentFrameLocationTextInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAppointmentFrameLocationTextInputActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_editAppointmentFrameLocationTextInputActionPerformed
+    }//GEN-LAST:event_addAppointmentFrameLocationTextInputActionPerformed
 
     private void commandLineInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_commandLineInputActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_commandLineInputActionPerformed
 
-    private void editAppointmentFrameConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editAppointmentFrameConfirmButtonActionPerformed
+    private void addAppointmentFrameConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAppointmentFrameConfirmButtonActionPerformed
 
         boolean validInput = true;
-        String location = editAppointmentFrameLocationTextInput.getText();
-        String description = editAppointmentFrameDescriptionTextarea.getText();
-        String category = editAppointmentFrameCategoryTextInput.getText();
-        String date = editAppointmentFrameDateTextInput.getText();
-        String start = editAppointmentFrameStartTimeTextInput.getText();
-        String end = editAppointmentFrameEndTimeTextInput.getText();
-        String rec = (String) editAppointmentFrameRecurrenceComboList.getModel().getElementAt(editAppointmentFrameRecurrenceComboList.getSelectedIndex());
+        String location = addAppointmentFrameLocationTextInput.getText();
+        String name = addAppointmentFrameNameTextarea.getText();
+        String description = addAppointmentFrameDescriptionTextarea.getText();
+        String category = addAppointmentFrameCategoryTextInput.getText();
+        String date = addAppointmentFrameDateTextInput.getText();
+        String start = addAppointmentFrameStartTimeTextInput.getText();
+        String end = addAppointmentFrameEndTimeTextInput.getText();
+        String rec = (String) addAppointmentFrameRecurrenceComboList.getModel().getElementAt(addAppointmentFrameRecurrenceComboList.getSelectedIndex());
 
         int remind = 0;
         
@@ -456,7 +376,7 @@ public class IS3Calendar extends javax.swing.JFrame {
         CalendarTime cStart = new CalendarTime(Integer.parseInt(arrStartTime[0]), Integer.parseInt(arrStartTime[1]));
         CalendarTime cEnd = new CalendarTime(Integer.parseInt(arrEndTime[0]), Integer.parseInt(arrEndTime[1]));
        
-        Appointment ap = new Appointment(cDate, cStart, cEnd, description.trim(), location, category, Appointment.Recurrence.NONE, remind);
+        Appointment ap = new Appointment(cDate, cStart, cEnd, name.trim(), description.trim(), location, category, Appointment.Recurrence.NONE, remind);
         /*   validInput = CalendarDate.isValidDateString(date);
         validInput = CalendarTime.isValidTimeString(start);
         validInput = CalendarTime.isValidTimeString(end);*/
@@ -464,11 +384,6 @@ public class IS3Calendar extends javax.swing.JFrame {
             cal.addAppointment(ap);
             cal.saveCalendar(fileName);
             addAppointmentFrame.setVisible(false);
-            JLabel label = new JLabel();
-            label.setText(ap.category);
-            jTable2.setValueAt(label, 5, 5);
-            
-           
         }
         else{
             
@@ -515,13 +430,27 @@ public class IS3Calendar extends javax.swing.JFrame {
             i++;
         }
         
-  
-    }//GEN-LAST:event_editAppointmentFrameConfirmButtonActionPerformed
- private void populateMonth(GregorianCalendar today) {
+
+        
+        
+    }//GEN-LAST:event_addAppointmentFrameConfirmButtonActionPerformed
+ 
+       public TableCellRenderer getCellRenderer(JTable table, int row, int column) {
+        TableColumn tableColumn = table.getColumnModel().getColumn(column);
+        TableCellRenderer renderer = tableColumn.getCellRenderer();
+        if (renderer == null) {
+            renderer = table.getDefaultRenderer(table.getColumnClass(column));
+        }
+        return renderer;
+    }
+
+    
+    private void populateMonth(GregorianCalendar today) {
+    
         int[] dayOffset = {6,0,1,2,3,4,5};
-        for (int x = 0; x < jTable2.getRowCount(); x++) {
-            for (int y = 0; y < jTable2.getColumnCount(); y++) {
-                 jTable2.setValueAt(null, x, y);
+        for (int x = 0; x < monthDisplayTable.getRowCount(); x++) {
+            for (int y = 0; y < monthDisplayTable.getColumnCount(); y++) {
+                 monthDisplayTable.setValueAt(null, x, y);
             }
         }
                  
@@ -531,32 +460,42 @@ public class IS3Calendar extends javax.swing.JFrame {
         int startDay = dayOffset[today.get(Calendar.DAY_OF_WEEK)-1];
         System.out.println(startDay);
         int i = 0;
-        for (int x = 0; x < jTable2.getRowCount(); x++) {
-            for (int y = startDay; y < jTable2.getColumnCount(); y++) {
+        
+        startDate = new CalendarDate(today.DAY_OF_MONTH,today.MONTH,today.YEAR);
+        endDate = new CalendarDate(monthDays,today.MONTH,today.YEAR);
+        
+        
+        //get list of appointments between start and end dates
+        List<Appointment> apps = cal.getAppointmentsBetweenDates(startDate, endDate);
+        
+        for (int x = 0; x < monthDisplayTable.getRowCount(); x++) {
+            for (int y = startDay; y < monthDisplayTable.getColumnCount(); y++) {
                 if (i >= monthDays) { break; }
                 i++;
-                 jTable2.setValueAt(i, x, y);
+                String s = i+"\n";
+                for (Appointment a : apps) {
+                    if (a.date.day == i) {
+                        s = s + "\n" + a.name;
+                    }
+                }
+                 monthDisplayTable.setValueAt(s, x, y);
             }
             startDay = 0;
         }
  }
     private void commandLineSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_commandLineSubmitActionPerformed
-                GregorianCalendar today = new GregorianCalendar();
-                currentMonthDate = today;
-                populateMonth(today);
+
     }//GEN-LAST:event_commandLineSubmitActionPerformed
 
     private void monthDisplayPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_monthDisplayPaneStateChanged
 
     }//GEN-LAST:event_monthDisplayPaneStateChanged
 
-    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
-        int row = jTable2.rowAtPoint(evt.getPoint());
-        int col = jTable2.columnAtPoint(evt.getPoint());        // TODO add your handling code here:
-        jTable2.getValueAt(row, col);
-        editAppointmentFrame.setTitle("Edit appointment");
-        editAppointmentFrame.setVisible(true);
-    }//GEN-LAST:event_jTable2MouseClicked
+    private void monthDisplayTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_monthDisplayTableMouseClicked
+        int row = monthDisplayTable.rowAtPoint(evt.getPoint());
+        int col = monthDisplayTable.columnAtPoint(evt.getPoint());        // TODO add your handling code here:
+        System.out.println(row + " " + col);
+    }//GEN-LAST:event_monthDisplayTableMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
@@ -569,15 +508,6 @@ public class IS3Calendar extends javax.swing.JFrame {
                 populateMonth(currentMonthDate);
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void addAppointmentFrameLocationTextInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAppointmentFrameLocationTextInputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_addAppointmentFrameLocationTextInputActionPerformed
-
-    private void addAppointmentFrameConfirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAppointmentFrameConfirmButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_addAppointmentFrameConfirmButtonActionPerformed
-
-    
     /**
      * @param args the command line arguments
      */
@@ -631,24 +561,13 @@ public class IS3Calendar extends javax.swing.JFrame {
     private javax.swing.JButton commandLineSubmit;
     private javax.swing.JScrollPane dayDisplayPane;
     private javax.swing.JTable dayDisplayTable;
-    private javax.swing.JFrame editAppointmentFrame;
-    private javax.swing.JTextField editAppointmentFrameCategoryTextInput;
-    private javax.swing.JButton editAppointmentFrameConfirmButton;
-    private javax.swing.JTextField editAppointmentFrameDateTextInput;
-    private javax.swing.JTextArea editAppointmentFrameDescriptionTextarea;
-    private javax.swing.JTextField editAppointmentFrameEndTimeTextInput;
-    private javax.swing.JTextField editAppointmentFrameLocationTextInput;
-    private javax.swing.JComboBox editAppointmentFrameRecurrenceComboList;
-    private javax.swing.JTextField editAppointmentFrameStartTimeTextInput;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTabbedPane monthDisplayPane;
+    private javax.swing.JTable monthDisplayTable;
+    private javax.swing.JTable weekDisplayTable;
     // End of variables declaration//GEN-END:variables
-
 }

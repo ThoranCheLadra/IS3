@@ -12,6 +12,7 @@ public class Appointment {
 	
 	public enum Recurrence{NONE, DAILY, WEEKLY, TWO_WEEKLY, FOUR_WEEKLY};
 	
+        public String name; // Name of the appointment
 	public String description; // Description of the appointment
 	public String location;    // where it occurs (optional)
 	public String category;    // Type of appointment (eg, work, social, uni etc)
@@ -19,7 +20,7 @@ public class Appointment {
 	public int reminder;		// Reminder n minutes before.
 	
 	
-	public Appointment(CalendarDate the_date, CalendarTime s_time, CalendarTime e_time, String desc){
+	public Appointment(CalendarDate the_date, CalendarTime s_time, CalendarTime e_time, String name, String desc){
 		ap_id = 0;
 		
 		date = the_date;
@@ -27,7 +28,7 @@ public class Appointment {
 		
 		end_time = e_time;
 			
-
+                this.name = name;
 		description = desc;
 		location = "";
 		category = "";
@@ -35,14 +36,14 @@ public class Appointment {
 		reminder = 0;
 	}
 	
-	public Appointment(CalendarDate the_date, CalendarTime s_time, CalendarTime e_time, String desc, String loc){
+	public Appointment(CalendarDate the_date, CalendarTime s_time, CalendarTime e_time, String name, String desc, String loc){
 		ap_id = 0;
 
 		date = the_date;
 		start_time = s_time;
 		
 		end_time = e_time;
-				
+                this.name = name;
 		description = desc;
 		
 		location = loc;
@@ -51,14 +52,15 @@ public class Appointment {
 		reminder = 0;
 	}	
 	
-	public Appointment(CalendarDate the_date, CalendarTime s_time, CalendarTime e_time, String desc, String loc, String cat){
+	public Appointment(CalendarDate the_date, CalendarTime s_time, CalendarTime e_time, String name, String desc, String loc, String cat){
 		ap_id = 0;
 
 		date = the_date;
 		start_time = s_time;
 		
 		end_time = e_time;
-
+                
+                this.name = name;
 		description = desc;
 		location = loc;
 		category = cat;
@@ -66,7 +68,7 @@ public class Appointment {
 		reminder = 0;
 	}
 	
-	public Appointment(CalendarDate the_date, CalendarTime s_time, CalendarTime e_time, String desc, String loc, String cat, Recurrence rec, int rem){
+	public Appointment(CalendarDate the_date, CalendarTime s_time, CalendarTime e_time, String name, String desc, String loc, String cat, Recurrence rec, int rem){
 		ap_id = 0;
 
 		date = the_date;
@@ -74,6 +76,7 @@ public class Appointment {
 		
 		end_time = e_time;
 		
+                this.name = name;
 		description = desc;
 		
 		location = loc;
