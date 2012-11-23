@@ -135,6 +135,7 @@ public class CalendarEx {
 				 p.println(ap.end_time.hr);
 				 p.println(ap.end_time.min);
 				 
+                                 p.println(ap.name);
 				 p.println(ap.description);
 				 p.println(ap.location);
 				 p.println(ap.category);
