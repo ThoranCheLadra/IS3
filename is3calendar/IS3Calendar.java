@@ -33,6 +33,8 @@ public class IS3Calendar extends javax.swing.JFrame {
         fileName = "events6.ser";
         displayMode = "Day";
         monthDisplayPane.setSelectedIndex(2);
+        cal.openCalendar(fileName);
+        //cal.printCalendar();
         GregorianCalendar today = new GregorianCalendar();
         currentMonthDate = today;
         populateMonth(today);
@@ -184,6 +186,11 @@ public class IS3Calendar extends javax.swing.JFrame {
                 monthDisplayPaneStateChanged(evt);
             }
         });
+        monthDisplayPane.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                monthDisplayPaneFocusGained(evt);
+            }
+        });
 
         dayDisplayTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -303,7 +310,6 @@ public class IS3Calendar extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        monthDisplayTable.setColumnSelectionAllowed(false);
         monthDisplayTable.setRowHeight(40);
         monthDisplayTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -311,6 +317,13 @@ public class IS3Calendar extends javax.swing.JFrame {
             }
         });
         jScrollPane4.setViewportView(monthDisplayTable);
+        monthDisplayTable.getColumnModel().getColumn(0).setHeaderValue("Monday");
+        monthDisplayTable.getColumnModel().getColumn(1).setHeaderValue("Tuesday");
+        monthDisplayTable.getColumnModel().getColumn(2).setHeaderValue("Wednesday");
+        monthDisplayTable.getColumnModel().getColumn(3).setHeaderValue("Thursday");
+        monthDisplayTable.getColumnModel().getColumn(4).setHeaderValue("Friday");
+        monthDisplayTable.getColumnModel().getColumn(5).setHeaderValue("Saturday");
+        monthDisplayTable.getColumnModel().getColumn(6).setHeaderValue("Sunday");
 
         monthDisplayPane.addTab("Month", jScrollPane4);
 
@@ -466,42 +479,8 @@ public class IS3Calendar extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_addAppointmentFrameConfirmButtonActionPerformed
- 
-       public TableCellRenderer getCellRenderer(JTable table, int row, int column) {
-        TableColumn tableColumn = table.getColumnModel().getColumn(column);
-        TableCellRenderer renderer = tableColumn.getCellRenderer();
-        if (renderer == null) {
-            renderer = table.getDefaultRenderer(table.getColumnClass(column));
-        }
-        return renderer;
-    }
-
     
     private void populateMonth(GregorianCalendar today) {
-        
-         startDate = new CalendarDate(1,11,2012);
-        endDate = new CalendarDate(30,11,2012);
-        
-        
-        //get list of appointments between start and end dates
-        List<Appointment> ax = cal.getAppointmentsBetweenDates(startDate, endDate);
-       
-        System.out.println("Relevant appointments between " + startDate + " and " + endDate + " :");
-        int k =0;
-        for(Appointment app : ax){
-            System.out.print("Appointment number: "  + k + " "+ app);
-              //some code to create an appointment box for this in the table
-            
-            //also get recurrence dates for date range, these need to be displayed 
-              List<CalendarDate> recurs = app.getRecurrenceDates(startDate, endDate);
-              
-              for(CalendarDate d : recurs){
-                  System.out.println("This appointment will also be displayed (as a duplicate) on " + d);
-                  //some code to create an identical appointment box for this recurrence in the table
-              }
-            k++;
-        }
-    
         int[] dayOffset = {6,0,1,2,3,4,5};
         for (int x = 0; x < monthDisplayTable.getRowCount(); x++) {
             for (int y = 0; y < monthDisplayTable.getColumnCount(); y++) {
@@ -510,33 +489,30 @@ public class IS3Calendar extends javax.swing.JFrame {
         }
                  
         int dayFix = dayOffset[today.get(Calendar.DAY_OF_WEEK)-1];
-        int monthDays = today.getActualMaximum(Calendar.DAY_OF_MONTH); 
+        int monthDays = today.getActualMaximum(Calendar.DAY_OF_MONTH);
         today.set(Calendar.DAY_OF_MONTH, 1);
         int startDay = dayOffset[today.get(Calendar.DAY_OF_WEEK)-1];
-        System.out.println(startDay);
         int i = 0;
         
         startDate = new CalendarDate(today.get(Calendar.DAY_OF_MONTH)
-                ,11,today.get(Calendar.YEAR));
-        endDate = new CalendarDate(monthDays,11,
+                ,today.get(Calendar.MONTH)+1,today.get(Calendar.YEAR));
+        endDate = new CalendarDate(monthDays,today.get(Calendar.MONTH)+1,
                 today.get(Calendar.YEAR));
         
-        System.out.println(startDate + " " +endDate);
         //get list of appointments between start and end dates
         List<Appointment> apps = cal.getAppointmentsBetweenDates(startDate, endDate);
-        System.out.println("FOO "+apps.size());
         for (int x = 0; x < monthDisplayTable.getRowCount(); x++) {
             for (int y = startDay; y < monthDisplayTable.getColumnCount(); y++) {
                 if (i >= monthDays) { break; }
                 i++;
-                String s = i+"\n";
+                String s = i+" - ";
                 for (Appointment a : apps) {
                     if (a.date.day == i) {
-                        System.out.println("HUMM "+i);
-                        s = s + "\n" + a.name;
+                        s = s + a.name + " / ";
                     }
                 }
-                 monthDisplayTable.setValueAt(s, x, y);
+                s = s.substring(0, s.length()-3);
+                monthDisplayTable.setValueAt(s, x, y);
             }
             startDay = 0;
         }
@@ -574,6 +550,10 @@ public class IS3Calendar extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_addAppointmentFrameNameTextInputActionPerformed
 
+    private void monthDisplayPaneFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_monthDisplayPaneFocusGained
+
+    }//GEN-LAST:event_monthDisplayPaneFocusGained
+
     /**
      * @param args the command line arguments
      */
@@ -607,8 +587,6 @@ public class IS3Calendar extends javax.swing.JFrame {
             public void run() {
                 IS3Calendar c = new IS3Calendar();
                 c.setVisible(true);
-                cal.openCalendar(fileName);
-                cal.printCalendar();
             }
         });
     }
