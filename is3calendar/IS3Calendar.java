@@ -6,6 +6,7 @@ package is3calendar;
 
 import calendar_ex.*;
 import java.awt.Component;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
@@ -73,6 +74,7 @@ public class IS3Calendar extends javax.swing.JFrame {
         monthDisplayTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         addAppointmentFrame.setMinimumSize(new java.awt.Dimension(500, 500));
 
@@ -341,6 +343,8 @@ public class IS3Calendar extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -359,6 +363,8 @@ public class IS3Calendar extends javax.swing.JFrame {
                         .addComponent(jButton1)
                         .addGap(18, 18, 18)
                         .addComponent(jButton2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(190, 190, 190))
             .addGroup(layout.createSequentialGroup()
@@ -374,10 +380,11 @@ public class IS3Calendar extends javax.swing.JFrame {
                     .addComponent(commandLineSubmit)
                     .addComponent(commandLineInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addAppointmentButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(monthDisplayPane, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
                 .addGap(54, 54, 54))
@@ -516,6 +523,7 @@ public class IS3Calendar extends javax.swing.JFrame {
             }
             startDay = 0;
         }
+        jLabel1.setText(new SimpleDateFormat("MMMM yyyy").format(today.getTime()));
  }
     private void commandLineSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_commandLineSubmitActionPerformed
 
@@ -532,14 +540,20 @@ public class IS3Calendar extends javax.swing.JFrame {
     }//GEN-LAST:event_monthDisplayTableMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+                GregorianCalendar nextMonth = new GregorianCalendar();
+                nextMonth.set(Calendar.MONTH, currentMonthDate.get(Calendar.MONTH)-1);
+                nextMonth.set(Calendar.DAY_OF_MONTH, 1);
+                currentMonthDate = nextMonth;
+                populateMonth(nextMonth);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-                currentMonthDate.set(Calendar.MONTH, currentMonthDate.MONTH+1);
-                
-                populateMonth(currentMonthDate);
+                GregorianCalendar nextMonth = new GregorianCalendar();
+                nextMonth.set(Calendar.MONTH, currentMonthDate.get(Calendar.MONTH)+1);
+                nextMonth.set(Calendar.DAY_OF_MONTH, 1);
+                currentMonthDate = nextMonth;
+                populateMonth(nextMonth);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void dayDisplayTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dayDisplayTableMouseClicked
@@ -608,6 +622,7 @@ public class IS3Calendar extends javax.swing.JFrame {
     private javax.swing.JTable dayDisplayTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
