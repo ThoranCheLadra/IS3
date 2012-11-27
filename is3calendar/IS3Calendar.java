@@ -6,6 +6,7 @@ package is3calendar;
 
 import calendar_ex.*;
 import java.awt.Component;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.swing.*;
@@ -29,16 +30,20 @@ public class IS3Calendar extends javax.swing.JFrame {
      * Creates new form Calendar
      */
     public IS3Calendar() {
-        initComponents();
         cal = new CalendarEx();
         fileName = "events6.ser";
         displayMode = "Day";
-        monthDisplayPane.setSelectedIndex(2);
+
         cal.openCalendar(fileName);
+        initComponents();
+
+        monthDisplayPane.setSelectedIndex(0);
         //cal.printCalendar();
         GregorianCalendar today = new GregorianCalendar();
         currentMonthDate = today;
         populateMonth(today);
+        populateWeek(today);
+        populateDay(new Date());
     }
     
    
@@ -477,7 +482,15 @@ public class IS3Calendar extends javax.swing.JFrame {
             cal.addAppointment(ap);
             cal.saveCalendar(fileName);
             addAppointmentFrame.setVisible(false); 
-            populateMonth(currentMonthDate);
+            if(displayMode == "Month"){
+                populateMonth(currentMonthDate);
+            }
+            else if(displayMode == "Week"){
+               populateWeek(currentMonthDate);
+            }
+            else{
+                populateDay(new Date());
+            }
         }
         else{
             
@@ -597,12 +610,50 @@ public class IS3Calendar extends javax.swing.JFrame {
         }
         jLabel1.setText(new SimpleDateFormat("MMMM yyyy").format(today.getTime()));
  }
+    
+    private void populateWeek(GregorianCalendar today) {
+        int dates[] = new int[7];
+        DateFormat dateFormat = new SimpleDateFormat("dd");
+        Calendar c = Calendar.getInstance();
+        int day = Integer.parseInt(dateFormat.format(c.getTime()));
+        
+        jLabel1.setText(new SimpleDateFormat("MMMM yyyy").format(today.getTime()) + " - Week "+(Math.round(day / 7)+1));
+ }
+    
+    private void populateDay(Date today) {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate = dateFormat.format(today.getTime());
+        String[] arrDate = strDate.split("/");
+        CalendarDate begin = new CalendarDate(Integer.parseInt(arrDate[0]), Integer.parseInt(arrDate[1]), Integer.parseInt(arrDate[2]));
+        ArrayList<Appointment> list = new ArrayList<>();
+        list = (ArrayList) cal.getAppointmentsBetweenDates(begin, begin);
+        for(Appointment ap : list){
+            int hour = ap.start_time.hr-8;
+            if(hour < 0){
+                hour = 24 + hour;
+            }
+            dayDisplayTable.setValueAt(ap, hour, 1);
+        }
+        jLabel1.setText(strDate);
+ }
     private void commandLineSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_commandLineSubmitActionPerformed
 
     }//GEN-LAST:event_commandLineSubmitActionPerformed
 
     private void monthDisplayPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_monthDisplayPaneStateChanged
-
+         int i = monthDisplayPane.getSelectedIndex();
+         if(i == 0){
+             displayMode = "Day";
+             populateDay(new Date());
+         }
+         else if(i == 1){
+             displayMode = "Week";
+             populateWeek(new GregorianCalendar());
+         }
+         else{
+             displayMode = "Month";
+             populateMonth(new GregorianCalendar());
+         }
     }//GEN-LAST:event_monthDisplayPaneStateChanged
 
     private void monthDisplayTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_monthDisplayTableMouseClicked
