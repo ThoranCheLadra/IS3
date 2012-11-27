@@ -67,6 +67,7 @@
             <Property name="text" type="java.lang.String" value="Location"/>
           </Properties>
           <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addAppointmentFrameLocationTextInputMouseClicked"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addAppointmentFrameLocationTextInputActionPerformed"/>
           </Events>
         </Component>
@@ -74,21 +75,34 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Category"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addAppointmentFrameCategoryTextInputMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addAppointmentFrameCategoryTextInputActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="addAppointmentFrameDateTextInput">
           <Properties>
             <Property name="text" type="java.lang.String" value="Date (DD/MM/YYYY)"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addAppointmentFrameDateTextInputMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="addAppointmentFrameStartTimeTextInput">
           <Properties>
             <Property name="text" type="java.lang.String" value="Start time (hh:mm)"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addAppointmentFrameStartTimeTextInputMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="addAppointmentFrameEndTimeTextInput">
           <Properties>
             <Property name="text" type="java.lang.String" value="End time (hh:mm)"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addAppointmentFrameEndTimeTextInputMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="addAppointmentFrameConfirmButton">
           <Properties>
@@ -111,6 +125,9 @@
                 <Property name="rows" type="int" value="5"/>
                 <Property name="text" type="java.lang.String" value="Description"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addAppointmentFrameDescriptionTextareaMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -126,6 +143,7 @@
             <Property name="text" type="java.lang.String" value="Name"/>
           </Properties>
           <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addAppointmentFrameNameTextInputMouseClicked"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addAppointmentFrameNameTextInputActionPerformed"/>
           </Events>
         </Component>
@@ -192,10 +210,12 @@
                   <Component id="addAppointmentButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="monthDisplayPane" pref="527" max="32767" attributes="0"/>

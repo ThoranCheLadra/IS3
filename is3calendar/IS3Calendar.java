@@ -79,6 +79,11 @@ public class IS3Calendar extends javax.swing.JFrame {
         addAppointmentFrame.setMinimumSize(new java.awt.Dimension(500, 500));
 
         addAppointmentFrameLocationTextInput.setText("Location");
+        addAppointmentFrameLocationTextInput.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addAppointmentFrameLocationTextInputMouseClicked(evt);
+            }
+        });
         addAppointmentFrameLocationTextInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addAppointmentFrameLocationTextInputActionPerformed(evt);
@@ -86,12 +91,37 @@ public class IS3Calendar extends javax.swing.JFrame {
         });
 
         addAppointmentFrameCategoryTextInput.setText("Category");
+        addAppointmentFrameCategoryTextInput.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addAppointmentFrameCategoryTextInputMouseClicked(evt);
+            }
+        });
+        addAppointmentFrameCategoryTextInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addAppointmentFrameCategoryTextInputActionPerformed(evt);
+            }
+        });
 
         addAppointmentFrameDateTextInput.setText("Date (DD/MM/YYYY)");
+        addAppointmentFrameDateTextInput.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addAppointmentFrameDateTextInputMouseClicked(evt);
+            }
+        });
 
         addAppointmentFrameStartTimeTextInput.setText("Start time (hh:mm)");
+        addAppointmentFrameStartTimeTextInput.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addAppointmentFrameStartTimeTextInputMouseClicked(evt);
+            }
+        });
 
         addAppointmentFrameEndTimeTextInput.setText("End time (hh:mm)");
+        addAppointmentFrameEndTimeTextInput.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addAppointmentFrameEndTimeTextInputMouseClicked(evt);
+            }
+        });
 
         addAppointmentFrameConfirmButton.setText("Confirm");
         addAppointmentFrameConfirmButton.addActionListener(new java.awt.event.ActionListener() {
@@ -103,11 +133,21 @@ public class IS3Calendar extends javax.swing.JFrame {
         addAppointmentFrameDescriptionTextarea.setColumns(20);
         addAppointmentFrameDescriptionTextarea.setRows(5);
         addAppointmentFrameDescriptionTextarea.setText("Description");
+        addAppointmentFrameDescriptionTextarea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addAppointmentFrameDescriptionTextareaMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(addAppointmentFrameDescriptionTextarea);
 
         addAppointmentFrameRecurrenceComboList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "Daily", "Weekly", "Two weekly", "Four weekly" }));
 
         addAppointmentFrameNameTextInput.setText("Name");
+        addAppointmentFrameNameTextInput.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addAppointmentFrameNameTextInputMouseClicked(evt);
+            }
+        });
         addAppointmentFrameNameTextInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addAppointmentFrameNameTextInputActionPerformed(evt);
@@ -381,10 +421,11 @@ public class IS3Calendar extends javax.swing.JFrame {
                     .addComponent(commandLineInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addAppointmentButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton2)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(monthDisplayPane, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
                 .addGap(54, 54, 54))
@@ -416,8 +457,8 @@ public class IS3Calendar extends javax.swing.JFrame {
         String date = addAppointmentFrameDateTextInput.getText();
         String start = addAppointmentFrameStartTimeTextInput.getText();
         String end = addAppointmentFrameEndTimeTextInput.getText();
-        String rec = (String) addAppointmentFrameRecurrenceComboList.getModel().getElementAt(addAppointmentFrameRecurrenceComboList.getSelectedIndex());
-
+        Appointment.Recurrence rec = Appointment.Recurrence.valueOf(((String) addAppointmentFrameRecurrenceComboList.getModel().getElementAt(addAppointmentFrameRecurrenceComboList.getSelectedIndex())).toUpperCase());
+        System.out.println(rec);
         int remind = 0;
         
         String[] arrDate = date.split("/");
@@ -428,14 +469,15 @@ public class IS3Calendar extends javax.swing.JFrame {
         CalendarTime cStart = new CalendarTime(Integer.parseInt(arrStartTime[0]), Integer.parseInt(arrStartTime[1]));
         CalendarTime cEnd = new CalendarTime(Integer.parseInt(arrEndTime[0]), Integer.parseInt(arrEndTime[1]));
        
-        Appointment ap = new Appointment(cDate, cStart, cEnd, name.trim(), description.trim(), location, category, Appointment.Recurrence.NONE, remind);
+        Appointment ap = new Appointment(cDate, cStart, cEnd, name.trim(), description.trim(), location, category, rec, remind);
         /*   validInput = CalendarDate.isValidDateString(date);
         validInput = CalendarTime.isValidTimeString(start);
         validInput = CalendarTime.isValidTimeString(end);*/
         if(validInput){
             cal.addAppointment(ap);
             cal.saveCalendar(fileName);
-            addAppointmentFrame.setVisible(false);
+            addAppointmentFrame.setVisible(false); 
+            populateMonth(currentMonthDate);
         }
         else{
             
@@ -494,7 +536,7 @@ public class IS3Calendar extends javax.swing.JFrame {
                  monthDisplayTable.setValueAt(null, x, y);
             }
         }
-                 
+        HashMap<Integer,ArrayList<String>> recdates = new HashMap<Integer,ArrayList<String>>();
         int dayFix = dayOffset[today.get(Calendar.DAY_OF_WEEK)-1];
         int monthDays = today.getActualMaximum(Calendar.DAY_OF_MONTH);
         today.set(Calendar.DAY_OF_MONTH, 1);
@@ -507,16 +549,46 @@ public class IS3Calendar extends javax.swing.JFrame {
                 today.get(Calendar.YEAR));
         
         //get list of appointments between start and end dates
+        System.out.println(startDate + " " + endDate);
         List<Appointment> apps = cal.getAppointmentsBetweenDates(startDate, endDate);
         for (int x = 0; x < monthDisplayTable.getRowCount(); x++) {
             for (int y = startDay; y < monthDisplayTable.getColumnCount(); y++) {
                 if (i >= monthDays) { break; }
                 i++;
                 String s = i+" - ";
+                if (recdates.containsKey(i)) {
+                    List<String> temwtf = recdates.get(i);
+                    //System.out.println(temwtf);
+                    for (String gn : temwtf) {
+                        s = s + gn + " / ";
+                    }
+                }
                 for (Appointment a : apps) {
                     if (a.date.day == i) {
                         s = s + a.name + " / ";
+                        List<CalendarDate> recurs = a.getRecurrenceDates(startDate, endDate);
+                        ArrayList<String> tempn = new ArrayList<String>();
+                        for(CalendarDate d : recurs){
+                            if (recdates.containsKey(d.day)) {
+                                ArrayList<String> humm = recdates.get(d.day);
+                                for (String s2 : humm) {
+                                    if (!tempn.contains(s2)) {
+                                        tempn.add(s2);
+                                    }
+                                }
+                            }
+                            if (!tempn.contains(a.name)) {
+                                tempn.add(a.name);
+                            }
+                            //System.out.println(d.day + " " + tempn);
+                            recdates.put(d.day,tempn);
+                            //tempn.clear();
+                        }
+                        //System.out.println(recdates);
+                        
                     }
+                    
+                    //monthDisplayTable.setValueAt(s2, x, y);
                 }
                 s = s.substring(0, s.length()-3);
                 monthDisplayTable.setValueAt(s, x, y);
@@ -567,6 +639,52 @@ public class IS3Calendar extends javax.swing.JFrame {
     private void monthDisplayPaneFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_monthDisplayPaneFocusGained
 
     }//GEN-LAST:event_monthDisplayPaneFocusGained
+
+    private void addAppointmentFrameNameTextInputMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addAppointmentFrameNameTextInputMouseClicked
+        if (addAppointmentFrameNameTextInput.getText().compareTo("Name") == 0) {
+            addAppointmentFrameNameTextInput.setText("");
+        }
+    }//GEN-LAST:event_addAppointmentFrameNameTextInputMouseClicked
+
+    private void addAppointmentFrameLocationTextInputMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addAppointmentFrameLocationTextInputMouseClicked
+        if (addAppointmentFrameLocationTextInput.getText().compareTo("Location") == 0) {
+            addAppointmentFrameLocationTextInput.setText("");
+        }
+    }//GEN-LAST:event_addAppointmentFrameLocationTextInputMouseClicked
+
+    private void addAppointmentFrameCategoryTextInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAppointmentFrameCategoryTextInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addAppointmentFrameCategoryTextInputActionPerformed
+
+    private void addAppointmentFrameCategoryTextInputMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addAppointmentFrameCategoryTextInputMouseClicked
+        if (addAppointmentFrameCategoryTextInput.getText().compareTo("Category") == 0) {
+            addAppointmentFrameCategoryTextInput.setText("");
+        }
+    }//GEN-LAST:event_addAppointmentFrameCategoryTextInputMouseClicked
+
+    private void addAppointmentFrameDescriptionTextareaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addAppointmentFrameDescriptionTextareaMouseClicked
+        if (addAppointmentFrameDescriptionTextarea.getText().compareTo("Description") == 0) {
+            addAppointmentFrameDescriptionTextarea.setText("");
+        }
+    }//GEN-LAST:event_addAppointmentFrameDescriptionTextareaMouseClicked
+
+    private void addAppointmentFrameDateTextInputMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addAppointmentFrameDateTextInputMouseClicked
+        if (addAppointmentFrameDateTextInput.getText().compareTo("Date (DD/MM/YYYY)") == 0) {
+            addAppointmentFrameDateTextInput.setText("");
+        }
+    }//GEN-LAST:event_addAppointmentFrameDateTextInputMouseClicked
+
+    private void addAppointmentFrameStartTimeTextInputMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addAppointmentFrameStartTimeTextInputMouseClicked
+        if (addAppointmentFrameStartTimeTextInput.getText().compareTo("Start time (hh:mm)") == 0) {
+            addAppointmentFrameStartTimeTextInput.setText("");
+        }
+    }//GEN-LAST:event_addAppointmentFrameStartTimeTextInputMouseClicked
+
+    private void addAppointmentFrameEndTimeTextInputMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addAppointmentFrameEndTimeTextInputMouseClicked
+        if (addAppointmentFrameEndTimeTextInput.getText().compareTo("End time (hh:mm)") == 0) {
+            addAppointmentFrameEndTimeTextInput.setText("");
+        }
+    }//GEN-LAST:event_addAppointmentFrameEndTimeTextInputMouseClicked
 
     /**
      * @param args the command line arguments
