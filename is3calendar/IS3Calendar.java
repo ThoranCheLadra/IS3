@@ -4,6 +4,7 @@
  */
 package is3calendar;
 
+import CommandParser.CommandParser;
 import calendar_ex.*;
 import java.awt.Component;
 import java.text.DateFormat;
@@ -26,6 +27,7 @@ public class IS3Calendar extends javax.swing.JFrame {
     private static CalendarDate startDate;
     private static CalendarDate endDate; 
     private static GregorianCalendar currentMonthDate;
+    private static Date currentDayDate;
     /**
      * Creates new form Calendar
      */
@@ -41,9 +43,11 @@ public class IS3Calendar extends javax.swing.JFrame {
         //cal.printCalendar();
         GregorianCalendar today = new GregorianCalendar();
         currentMonthDate = today;
+
+        currentDayDate = new Date();
         populateMonth(today);
         populateWeek(today);
-        populateDay(new Date());
+        populateDay(currentDayDate);
     }
     
    
@@ -613,6 +617,11 @@ public class IS3Calendar extends javax.swing.JFrame {
     
     private void populateWeek(GregorianCalendar today) {
         int dates[] = new int[7];
+        for (int x = 0; x < weekDisplayTable.getRowCount(); x++) {
+            for (int y = 1; y < weekDisplayTable.getColumnCount(); y++) {
+                 weekDisplayTable.setValueAt(null, x, y);
+            }
+        }
         DateFormat dateFormat = new SimpleDateFormat("dd");
         Calendar c = Calendar.getInstance();
         int day = Integer.parseInt(dateFormat.format(c.getTime()));
@@ -621,6 +630,12 @@ public class IS3Calendar extends javax.swing.JFrame {
  }
     
     private void populateDay(Date today) {
+        
+        for (int x = 0; x < dayDisplayTable.getRowCount(); x++) {
+            for (int y = 1; y < dayDisplayTable.getColumnCount(); y++) {
+                 dayDisplayTable.setValueAt(null, x, y);
+            }
+        }
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String strDate = dateFormat.format(today.getTime());
         String[] arrDate = strDate.split("/");
@@ -637,7 +652,9 @@ public class IS3Calendar extends javax.swing.JFrame {
         jLabel1.setText(strDate);
  }
     private void commandLineSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_commandLineSubmitActionPerformed
+        CommandParser.ParserResults cmd = CommandParser.parse(commandLineInput.getText());
 
+        System.out.println(cmd);
     }//GEN-LAST:event_commandLineSubmitActionPerformed
 
     private void monthDisplayPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_monthDisplayPaneStateChanged
@@ -663,20 +680,37 @@ public class IS3Calendar extends javax.swing.JFrame {
     }//GEN-LAST:event_monthDisplayTableMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-                GregorianCalendar nextMonth = new GregorianCalendar();
-                nextMonth.set(Calendar.MONTH, currentMonthDate.get(Calendar.MONTH)-1);
-                nextMonth.set(Calendar.DAY_OF_MONTH, 1);
-                currentMonthDate = nextMonth;
-                populateMonth(nextMonth);
+        if(displayMode == "Month"){       
+            GregorianCalendar nextMonth = new GregorianCalendar();
+            nextMonth.set(Calendar.MONTH, currentMonthDate.get(Calendar.MONTH)-1);
+            nextMonth.set(Calendar.DAY_OF_MONTH, 1);
+            currentMonthDate = nextMonth;
+            populateMonth(nextMonth);
+        }
+        else if(displayMode == "Week"){
+            
+        }
+        else{
+           currentDayDate = new Date(currentDayDate.getTime()-86400000);
+           populateDay(currentDayDate);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
+        if(displayMode == "Month"){ 
                 GregorianCalendar nextMonth = new GregorianCalendar();
                 nextMonth.set(Calendar.MONTH, currentMonthDate.get(Calendar.MONTH)+1);
                 nextMonth.set(Calendar.DAY_OF_MONTH, 1);
                 currentMonthDate = nextMonth;
                 populateMonth(nextMonth);
+        }
+        else if(displayMode == "Week"){
+        
+        }
+        else{
+           currentDayDate = new Date(currentDayDate.getTime()+86400000);
+           populateDay(currentDayDate);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void dayDisplayTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dayDisplayTableMouseClicked
