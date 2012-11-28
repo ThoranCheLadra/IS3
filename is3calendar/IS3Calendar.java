@@ -6,12 +6,9 @@ package is3calendar;
 
 import CommandParser.CommandParser;
 import calendar_ex.*;
-import java.awt.Component;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 
@@ -28,6 +25,7 @@ public class IS3Calendar extends javax.swing.JFrame {
     private static CalendarDate endDate; 
     private static GregorianCalendar currentMonthDate;
     private static Date currentDayDate;
+    private static Date currentWeekDate;
     /**
      * Creates new form Calendar
      */
@@ -43,10 +41,10 @@ public class IS3Calendar extends javax.swing.JFrame {
         //cal.printCalendar();
         GregorianCalendar today = new GregorianCalendar();
         currentMonthDate = today;
-
         currentDayDate = new Date();
+        currentWeekDate = new Date();
         populateMonth(today);
-        populateWeek(today);
+        populateWeek(currentWeekDate);
         populateDay(currentDayDate);
     }
     
@@ -84,6 +82,8 @@ public class IS3Calendar extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         addAppointmentFrame.setMinimumSize(new java.awt.Dimension(500, 500));
 
@@ -296,6 +296,7 @@ public class IS3Calendar extends javax.swing.JFrame {
 
         weekDisplayTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null, null, null, null},
                 {"8:00", null, null, null, null, null, null, null},
                 {"9:00", null, null, null, null, null, null, null},
                 {"10:00", null, null, null, null, null, null, null},
@@ -394,32 +395,40 @@ public class IS3Calendar extends javax.swing.JFrame {
 
         jLabel1.setText("jLabel1");
 
+        jLabel2.setText(".");
+
+        jLabel3.setText("");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(commandLineInput, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(commandLineSubmit)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(addAppointmentButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(201, 201, 201)
-                        .addComponent(jButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(274, 274, 274)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(commandLineInput, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(commandLineSubmit)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(addAppointmentButton)
                 .addGap(190, 190, 190))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(monthDisplayPane, javax.swing.GroupLayout.PREFERRED_SIZE, 916, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(43, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(199, 199, 199)
+                .addComponent(jButton1)
+                .addGap(189, 189, 189)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(119, 119, 119))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(376, 376, 376))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -428,16 +437,18 @@ public class IS3Calendar extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(commandLineSubmit)
                     .addComponent(commandLineInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addAppointmentButton))
+                    .addComponent(addAppointmentButton)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton2)
-                        .addComponent(jButton1)))
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(monthDisplayPane, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
-                .addGap(54, 54, 54))
+                .addComponent(monthDisplayPane, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
 
         pack();
@@ -490,7 +501,7 @@ public class IS3Calendar extends javax.swing.JFrame {
                 populateMonth(currentMonthDate);
             }
             else if(displayMode == "Week"){
-               populateWeek(currentMonthDate);
+               populateWeek(currentWeekDate);
             }
             else{
                 populateDay(new Date());
@@ -615,18 +626,69 @@ public class IS3Calendar extends javax.swing.JFrame {
         jLabel1.setText(new SimpleDateFormat("MMMM yyyy").format(today.getTime()));
  }
     
-    private void populateWeek(GregorianCalendar today) {
-        int dates[] = new int[7];
-        for (int x = 0; x < weekDisplayTable.getRowCount(); x++) {
-            for (int y = 1; y < weekDisplayTable.getColumnCount(); y++) {
-                 weekDisplayTable.setValueAt(null, x, y);
+    private void populateWeek(Date today) {
+        int dateOffset;
+        int[] dayArray = {6,0,1,2,3,4,5};
+            for (int x = 0; x < weekDisplayTable.getRowCount(); x++) {
+                for (int y = 1; y < weekDisplayTable.getColumnCount(); y++) {
+                     weekDisplayTable.setValueAt(null, x, y);
+                }
+            }
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate = dateFormat.format(today.getTime());
+        String[] arrDate = strDate.split("/");
+        
+        dateFormat = new SimpleDateFormat("MMMM yyyy");
+        String jLabelDate = dateFormat.format(today.getTime());
+        
+        int dayOffset = Integer.parseInt(arrDate[0]);
+        int monthOffset = Integer.parseInt(arrDate[1]);
+        int yearOffset = Integer.parseInt(arrDate[2]);
+        Calendar c = Calendar.getInstance();
+        c.set(yearOffset, monthOffset, dayOffset);
+        int monthMaxDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int i = dayOffset;
+        System.out.println(dayOffset);
+        CalendarDate begin = new CalendarDate(dayOffset, monthOffset, yearOffset);
+        if(dayOffset + 7 > monthMaxDays){
+            dayOffset = dayOffset + 7 - monthMaxDays;
+            monthOffset ++;
+            if(monthOffset > 12){
+                monthOffset = 1;
+                yearOffset ++;
             }
         }
-        DateFormat dateFormat = new SimpleDateFormat("dd");
-        Calendar c = Calendar.getInstance();
-        int day = Integer.parseInt(dateFormat.format(c.getTime()));
+        else{
+            dayOffset += 7;
+        }
         
-        jLabel1.setText(new SimpleDateFormat("MMMM yyyy").format(today.getTime()) + " - Week "+(Math.round(day / 7)+1));
+        for (int y = 1; y < weekDisplayTable.getColumnCount(); y++) {
+
+                weekDisplayTable.setValueAt(i, 0, y);
+                i++;
+                if(i > monthMaxDays){
+                    i = 1;
+                }
+
+
+           
+        }
+        CalendarDate end = new CalendarDate(dayOffset, monthOffset, yearOffset);
+        System.out.println(dayOffset);
+        ArrayList<Appointment> list = new ArrayList<>();
+        list = (ArrayList) cal.getAppointmentsBetweenDates(begin, end);
+        for(Appointment ap : list){
+            c.set(Calendar.DAY_OF_MONTH, ap.date.day);
+            int hour = ap.start_time.hr-8+1;
+            if(hour < 0){
+                hour = 24 + hour;
+            }
+            weekDisplayTable.setValueAt(ap, hour, dayArray[c.get(Calendar.DAY_OF_WEEK)-1]);
+        }
+        
+        
+        
+        jLabel1.setText(jLabelDate + " - Week x");
  }
     
     private void populateDay(Date today) {
@@ -647,14 +709,43 @@ public class IS3Calendar extends javax.swing.JFrame {
             if(hour < 0){
                 hour = 24 + hour;
             }
-            dayDisplayTable.setValueAt(ap, hour, 1);
+          dayDisplayTable.setValueAt(ap, hour, 1);
         }
         jLabel1.setText(strDate);
  }
     private void commandLineSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_commandLineSubmitActionPerformed
         CommandParser.ParserResults cmd = CommandParser.parse(commandLineInput.getText());
-
-        System.out.println(cmd);
+        CommandParser.view cmdV = cmd.commandView;
+        CommandParser.type cmdT = cmd.commandType;
+        String[] args = cmd.args;
+        if(cmdT == CommandParser.type.COMMAND){
+            switch(cmdV){
+                case ADD :
+                    addAppointmentButtonActionPerformed(null);
+                    break;
+                case DAY :
+                    monthDisplayPane.setSelectedIndex(0);
+                    monthDisplayPaneStateChanged(null);
+                    break;
+                case WEEK :
+                    monthDisplayPane.setSelectedIndex(1);
+                    monthDisplayPaneStateChanged(null);
+                    break;
+                case MONTH :
+                    monthDisplayPane.setSelectedIndex(2);
+                    monthDisplayPaneStateChanged(null);
+                    break;
+                case ERROR :
+                    jLabel3.setText("Invalid command. Type /h or /help to display available commands");
+                    break;
+            }
+        }
+        else if(cmdT == CommandParser.type.HASHTAG){
+            
+        }
+        else{
+            
+        }
     }//GEN-LAST:event_commandLineSubmitActionPerformed
 
     private void monthDisplayPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_monthDisplayPaneStateChanged
@@ -665,7 +756,7 @@ public class IS3Calendar extends javax.swing.JFrame {
          }
          else if(i == 1){
              displayMode = "Week";
-             populateWeek(new GregorianCalendar());
+             populateWeek(currentWeekDate);
          }
          else{
              displayMode = "Month";
@@ -688,7 +779,8 @@ public class IS3Calendar extends javax.swing.JFrame {
             populateMonth(nextMonth);
         }
         else if(displayMode == "Week"){
-            
+           currentWeekDate = new Date(currentWeekDate.getTime()-(7*86400000));
+           populateWeek(currentWeekDate);
         }
         else{
            currentDayDate = new Date(currentDayDate.getTime()-86400000);
@@ -705,7 +797,8 @@ public class IS3Calendar extends javax.swing.JFrame {
                 populateMonth(nextMonth);
         }
         else if(displayMode == "Week"){
-        
+           currentWeekDate = new Date(currentWeekDate.getTime()+(7*86400000));
+           populateWeek(currentWeekDate);
         }
         else{
            currentDayDate = new Date(currentDayDate.getTime()+86400000);
@@ -826,6 +919,8 @@ public class IS3Calendar extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;

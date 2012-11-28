@@ -12,14 +12,14 @@ import java.util.HashMap;
 public class CommandParser {
 	// holds the types of views and different view types (INSCEPTYPES!!)
 	public static enum type { COMMAND, HASHTAG, SEARCH; }
-	public static enum view { ERROR, SEARCH, DAY, WEEK, MONTH, YEAR, ADD, DEL, FILTER, CALC; }
+	public static enum view { ERROR, SEARCH, DAY, WEEK, MONTH, YEAR, ADD, DEL, FILTER, CALC, HELP; }
 
 	// holds a map of commands to their appropriate view type
 	private static final Map<String, view> commands = new HashMap<String , view>() {
 		private static final long serialVersionUID = -3374248550526581860L;
 	{
 	    put("/d", view.DAY);
-	    put("/day", view.ADD);
+	    put("/day", view.DAY);
 	    put("/w", view.WEEK);
 	    put("/week", view.WEEK);
 	    put("/m", view.MONTH);
@@ -30,6 +30,8 @@ public class CommandParser {
 	    put("/del", view.DEL);
 	    put("/filter", view.FILTER);
 	    put("/calc", view.CALC);
+            put("/h", view.HELP);
+            put("/help", view.HELP);
 	}};
 	
 	/**
@@ -42,9 +44,9 @@ public class CommandParser {
 	 * args 		a string array of arguments (if any)
 	 */
 	public static class ParserResults {
-	   type commandType;
-	   view commandView;
-	   String [] args;
+	   public type commandType;
+	   public view commandView;
+	   public String [] args;
 	   public ParserResults (type commandType, view commandView, String [] args) {
 		   this.commandType = commandType;
 		   this.commandView = commandView;
