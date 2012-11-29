@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class CommandParser {
 	// holds the types of views and different view types (INSCEPTYPES!!)
 	public static enum type { COMMAND, HASHTAG, SEARCH; }
-	public static enum view { ERROR, SEARCH, DAY, WEEK, MONTH, YEAR, ADD, DEL, FILTER, CALC, HELP; }
+	public static enum view { ERROR, SEARCH, DAY, WEEK, MONTH, YEAR, ADD, DEL, FILTER, CALC, HELP, ALL; }
 
 	// holds a map of commands to their appropriate view type
 	private static final Map<String, view> commands = new HashMap<String , view>() {
@@ -26,6 +26,7 @@ public class CommandParser {
 	    put("/month", view.MONTH);
 	    put("/y", view.YEAR);
 	    put("/year", view.YEAR);
+            put("/all", view.ALL);
 	    put("/add", view.ADD);
 	    put("/del", view.DEL);
 	    put("/filter", view.FILTER);

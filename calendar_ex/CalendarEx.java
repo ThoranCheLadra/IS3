@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 
 public class CalendarEx {
 
@@ -181,7 +182,7 @@ public class CalendarEx {
 		 
 	 }
 	 
-	 public List<Appointment> getAppointmentsBetweenDates(CalendarDate start, CalendarDate end){
+	 public List<Appointment> getAppointmentsBetweenDates(CalendarDate start, CalendarDate end, String[] categories){
 
 		 // given a start and end date, returns a list of appointments that recur between these dates
 		 
@@ -202,7 +203,21 @@ public class CalendarEx {
 			 List <CalendarDate> cd =  ap.getRecurrenceDates(startID, endID);
 
 			 if(cd.size() > 0){
+                             if(categories != null){
+                                 boolean isIn = false;
+                                 for(int i = 0; i < categories.length; i++){
+                                     if(ap.category.equals(categories[i])){
+                                         isIn = true;
+                                     }
+                                     
+                                 }
+                                 if(isIn){
+                                     aps.add(ap);
+                                 }
+                             }
+                             else{
 				 aps.add(ap);
+                             }
 			 }
 		 }
 		 

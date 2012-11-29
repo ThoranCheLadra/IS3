@@ -20,7 +20,8 @@ public class IS3Calendar extends javax.swing.JFrame {
     private static CalendarEx cal;
     private static String fileName;
     private static String displayMode;
-        
+    private static String[] categories = null;
+
     private static CalendarDate startDate;
     private static CalendarDate endDate; 
     private static GregorianCalendar currentMonthDate;
@@ -494,6 +495,7 @@ public class IS3Calendar extends javax.swing.JFrame {
         validInput = CalendarTime.isValidTimeString(start);
         validInput = CalendarTime.isValidTimeString(end);*/
         if(validInput){
+            categories = null;
             cal.addAppointment(ap);
             cal.saveCalendar(fileName);
             addAppointmentFrame.setVisible(false); 
@@ -534,7 +536,7 @@ public class IS3Calendar extends javax.swing.JFrame {
         
         
         //get list of appointments between start and end dates
-        List<Appointment> a = cal.getAppointmentsBetweenDates(startDate, endDate);
+        List<Appointment> a = cal.getAppointmentsBetweenDates(startDate, endDate, categories);
        
         System.out.println("Relevant appointments between " + startDate + " and " + endDate + " :");
         int i =0;
@@ -578,7 +580,7 @@ public class IS3Calendar extends javax.swing.JFrame {
         
         //get list of appointments between start and end dates
         System.out.println(startDate + " " + endDate);
-        List<Appointment> apps = cal.getAppointmentsBetweenDates(startDate, endDate);
+        List<Appointment> apps = cal.getAppointmentsBetweenDates(startDate, endDate, categories);
         for (int x = 0; x < monthDisplayTable.getRowCount(); x++) {
             for (int y = startDay; y < monthDisplayTable.getColumnCount(); y++) {
                 if (i >= monthDays) { break; }
@@ -676,7 +678,7 @@ public class IS3Calendar extends javax.swing.JFrame {
         CalendarDate end = new CalendarDate(dayOffset, monthOffset, yearOffset);
         System.out.println(dayOffset);
         ArrayList<Appointment> list = new ArrayList<>();
-        list = (ArrayList) cal.getAppointmentsBetweenDates(begin, end);
+        list = (ArrayList) cal.getAppointmentsBetweenDates(begin, end, categories);
         for(Appointment ap : list){
             c.set(Calendar.DAY_OF_MONTH, ap.date.day);
             int hour = ap.start_time.hr-8+1;
@@ -703,7 +705,7 @@ public class IS3Calendar extends javax.swing.JFrame {
         String[] arrDate = strDate.split("/");
         CalendarDate begin = new CalendarDate(Integer.parseInt(arrDate[0]), Integer.parseInt(arrDate[1]), Integer.parseInt(arrDate[2]));
         ArrayList<Appointment> list = new ArrayList<>();
-        list = (ArrayList) cal.getAppointmentsBetweenDates(begin, begin);
+        list = (ArrayList) cal.getAppointmentsBetweenDates(begin, begin, categories);
         for(Appointment ap : list){
             int hour = ap.start_time.hr-8;
             if(hour < 0){
@@ -738,10 +740,40 @@ public class IS3Calendar extends javax.swing.JFrame {
                 case ERROR :
                     jLabel3.setText("Invalid command. Type /h or /help to display available commands");
                     break;
+                case ALL :
+                    jLabel3.setText("No category filter on");
+                    categories = null;
+                    if("Day".equals(displayMode)){
+                        populateDay(currentDayDate);
+                    }
+                    else if("Week".equals(displayMode)){
+                        populateWeek(currentWeekDate);
+                    }
+                    else{
+                        populateMonth(currentMonthDate);
+                    }
+                    break;
             }
         }
         else if(cmdT == CommandParser.type.HASHTAG){
-            
+            jLabel3.setText("Currently displaying categories : ");
+            categories = new String[args.length];
+            System.out.println(categories.length);
+            for(int i = 1; i < args.length; i++){
+                if(!"".equals(args[i])){
+                    categories[i-1] = args[i];
+                    jLabel3.setText(jLabel3.getText() + args[i] + " ");
+                }
+            }
+            if("Day".equals(displayMode)){
+                populateDay(currentDayDate);
+            }
+            else if("Week".equals(displayMode)){
+                populateWeek(currentWeekDate);
+            }
+            else{
+                populateMonth(currentMonthDate);
+            }
         }
         else{
             
